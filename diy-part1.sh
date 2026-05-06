@@ -8,6 +8,8 @@
 # See /LICENSE for more information.
 #
 
+echo "==> DIY Part 1 Start..."
+
 # Uncomment a feed source
 # sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
 # sed -i '/helloworld/d' feeds.conf.default
@@ -15,3 +17,5 @@
 # Add a feed source
 # echo 'src-git helloworld https://github.com/fw876/helloworld' >> feeds.conf.default
 # echo 'src-git helloworld https://github.com/xiaorouji/openwrt-passwall-packages' >> feeds.conf.default
+
+echo "==> DIY Part 1 Done!!!"
