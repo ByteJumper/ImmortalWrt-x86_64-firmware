@@ -3,7 +3,7 @@
 #
 # File: .github/workflows/test-builder.yml
 # Description: Build ImmortalWrt using GitHub Actions
-# Version: 0.3
+# Version: 0.4
 #
 
 name: Build ImmortalWrt
@@ -163,44 +163,32 @@ jobs:
       if: env.UPLOAD_RELEASE == 'true' && steps.organize.outputs.status == 'success' && !cancelled()
       run: |
         echo "release_tag=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
-        cat > release.txt << 'EOF'
-# ImmortalWrt Firmware Release
-
-## Build Information
-- **Build Date**: EOF
-        echo "$(date +"%Y-%m-%d %H:%M:%S %Z")" >> release.txt
-        cat >> release.txt << 'EOF'
-- **Repository**: EOF
-        echo "${{ github.repository }}" >> release.txt
-        cat >> release.txt << 'EOF'
-- **Run ID**: EOF
-        echo "${{ github.run_id }}" >> release.txt
-        cat >> release.txt << 'EOF'
-- **Source**: EOF
-        echo "${{ env.REPO_URL }} (${{ env.REPO_BRANCH }} branch)" >> release.txt
-        cat >> release.txt << 'EOF'
-
-## Firmware Details
-- **Device**: EOF
-        echo "${{ env.DEVICE_NAME }}" >> release.txt
-        cat >> release.txt << 'EOF'
-- **Target**: x86_64
-- **Filesystem**: SquashFS / Ext4
-
-## Default Settings
-- **Default IP**: 192.168.1.1 (ImmortalWrt default)
-- **Default Password**: (none)
-
-## Download
-Firmware files are attached below. If download fails, you can also get them from:
-GitHub Actions -> Run #EOF
-        echo "${{ github.run_id }}" >> release.txt
-        cat >> release.txt << 'EOF' -> Artifacts
-
-## Notes
-- This is an automated build from GitHub Actions
-- For more information, visit: https://github.com/immortalwrt/immortalwrt
-EOF
+        {
+          echo '# ImmortalWrt Firmware Release'
+          echo ''
+          echo '## Build Information'
+          echo "- **Build Date**: $(date +'%Y-%m-%d %H:%M:%S %Z')"
+          echo "- **Repository**: ${{ github.repository }}"
+          echo "- **Run ID**: ${{ github.run_id }}"
+          echo "- **Source**: ${{ env.REPO_URL }} (${{ env.REPO_BRANCH }} branch)"
+          echo ''
+          echo '## Firmware Details'
+          echo "- **Device**: ${{ env.DEVICE_NAME }}"
+          echo '- **Target**: x86_64'
+          echo '- **Filesystem**: SquashFS / Ext4'
+          echo ''
+          echo '## Default Settings'
+          echo '- **Default IP**: 192.168.1.1 (ImmortalWrt default)'
+          echo '- **Default Password**: (none)'
+          echo ''
+          echo '## Download'
+          echo 'Firmware files are attached below. If download fails, you can also get them from:'
+          echo "GitHub Actions -> Run #${{ github.run_id }} -> Artifacts"
+          echo ''
+          echo '## Notes'
+          echo '- This is an automated build from GitHub Actions'
+          echo '- For more information, visit: https://github.com/immortalwrt/immortalwrt'
+        } > release.txt
         echo "status=success" >> $GITHUB_OUTPUT
 
     - name: Upload firmware to release (Primary)
