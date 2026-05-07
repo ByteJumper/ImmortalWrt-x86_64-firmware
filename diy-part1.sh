@@ -14,8 +14,6 @@ echo "==> DIY Part 1 Start..."
 # sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
 # sed -i '/helloworld/d' feeds.conf.default
 
-echo 'src-git ddns-go https://github.com/sirpdboy/luci-app-ddns-go.git' >> feeds.conf.default
-
 # Add a feed source
 # echo 'src-git helloworld https://github.com/fw876/helloworld' >> feeds.conf.default
 # echo 'src-git helloworld https://github.com/xiaorouji/openwrt-passwall-packages' >> feeds.conf.default
