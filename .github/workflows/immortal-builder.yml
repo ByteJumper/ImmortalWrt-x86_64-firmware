@@ -1,17 +1,27 @@
+#
+# https://github.com/ByteJumper/ImmortalWrt-x86_64-firmware
+#
+# File: .github/workflows/immortal-builder.yml
+# Description: Build OpenWrt using GitHub Actions
+# Version: 0.1 (Fixed YAML syntax)
+# 
+
 name: Immortal Builder
 
 on:
   repository_dispatch:
+    types: [Immortal Update]
   workflow_dispatch:
     inputs:
       version:
-        description: 'ImmortalWrt 版本 (例如: v24.10.6, master)'
+        description: 'ImmortalWrt 版本'
         required: true
         default: 'master'
         type: string
+
 env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH: ${{ github.event.inputs.version }}
+  REPO_BRANCH: ${{ github.event.client_payload.version || github.event.inputs.version || 'master' }}
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
   DIY_P1_SH: diy-part1.sh
@@ -41,7 +51,7 @@ jobs:
         sudo docker image prune --all --force
         sudo -E apt-get -qq update
 
-        # ⭐ ImmortalWrt 推荐依赖（已适配）
+        # ImmortalWrt 推荐依赖（已适配）
         sudo -E apt-get -qq install \
           build-essential clang flex bison g++ gawk \
           gcc-multilib g++-multilib gettext git libncurses-dev \
