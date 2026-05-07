@@ -48,7 +48,6 @@ jobs:
         sudo docker image prune --all --force
         sudo -E apt-get -qq update
 
-        # ImmortalWrt 推荐依赖（已适配）
         sudo -E apt-get -qq install \
           build-essential clang flex bison g++ gawk \
           gcc-multilib g++-multilib gettext git libncurses-dev \
@@ -114,7 +113,10 @@ jobs:
           | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
 
         [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
-        echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+
+        VERSION_NUMBER=$(grep -E '^VERSION_NUMBER:=' version 2>/dev/null | cut -d'=' -f2 || echo "${{ env.REPO_BRANCH }}")
+        echo "VERSION_TAG=_${VERSION_NUMBER}" >> $GITHUB_ENV
+        echo "FILE_DATE=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
     - name: Organize files
       id: organize
@@ -129,7 +131,7 @@ jobs:
       uses: actions/upload-artifact@v4
       if: steps.organize.outputs.status == 'success'
       with:
-        name: ImmortalWrt${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        name: ImmortalWrt${{ env.DEVICE_NAME }}${{ env.VERSION_TAG }}_${{ env.FILE_DATE }}
         path: ${{ env.FIRMWARE }}
 
     - name: Generate release
