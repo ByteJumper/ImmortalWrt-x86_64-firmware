@@ -14,11 +14,8 @@ echo "==> DIY Part 2 Start"
 # 修改默认IP
 sed -i 's/192.168.1.1/192.168.100.2/g' package/base-files/files/bin/config_generate
 
-# 设置空密码
-sed -i 's@.*CYXluq4wUazHjmCDBCqXF*@#&@g' package/lean/default-settings/files/zzz-default-settings
-
 # 修改主机名
-sed -i 's/OpenWrt/mRouter/g' package/base-files/files/bin/config_generate
+# sed -i 's/OpenWrt/mRouter/g' package/base-files/files/bin/config_generate
 
 # 文件权限
 [ -d files ] && chmod -R 755 files
