@@ -14,8 +14,8 @@ on:
         options:
           - master
           - v24.10.6
-          - v23.05.4
-          - v22.03.6
+          - v23.05.7
+          - v21.02.6
 
 jobs:
   check:
