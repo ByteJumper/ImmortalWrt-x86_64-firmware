@@ -2,10 +2,16 @@ name: Immortal Checker
 
 env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH: v24.10.6
+  REPO_BRANCH: ${{ github.event.inputs.version }}
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'ImmortalWrt 版本 (例如: v24.10.6, master)'
+        required: true
+        default: 'master'
+        type: string
 
 jobs:
   check:
