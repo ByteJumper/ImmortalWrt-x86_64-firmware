@@ -1,14 +1,21 @@
+#
+# https://github.com/ByteJumper/ImmortalWrt-x86_64-firmware
+#
+# File: .github/workflows/immortal-checker.yml
+# Description: Build OpenWrt using GitHub Actions
+# Version: 0.1 (Fixed YAML syntax)
+# 
+
 name: Immortal Checker
 
 env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH: ${{ github.event.inputs.version }}
 
 on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'ImmortalWrt 版本 (例如: v24.10.6, master)'
+        description: 'ImmortalWrt 版本'
         required: true
         default: 'master'
         type: string
@@ -21,7 +28,7 @@ jobs:
 
     - name: Get Commit Hash
       id: getHash
-      run: |        
+      run: |
         git clone --depth 1 $REPO_URL -b ${{ github.event.inputs.version }} .
         echo "commitHash=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
@@ -38,12 +45,13 @@ jobs:
         echo ${{ steps.getHash.outputs.commitHash }} > .commitHash
 
     - name: Trigger build
+      if: steps.cacheHash.outputs.cache-hit != 'true'
       uses: peter-evans/repository-dispatch@v2
       with:
         token: ${{ github.token }}
         event-type: Immortal Update
         client-payload: '{"version": "${{ github.event.inputs.version }}"}'
-    
+
     - name: Delete workflow runs
       uses: Mattraks/delete-workflow-runs@v2
       with:
