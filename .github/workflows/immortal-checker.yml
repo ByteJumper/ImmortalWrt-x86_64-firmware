@@ -1,11 +1,3 @@
-#
-# https://github.com/ByteJumper/ImmortalWrt-x86_64-firmware
-#
-# File: .github/workflows/immortal-checker.yml
-# Description: Build OpenWrt using GitHub Actions
-# Version: 0.1 (Fixed YAML syntax)
-# 
-
 name: Immortal Checker
 
 env:
@@ -18,7 +10,12 @@ on:
         description: 'ImmortalWrt 版本'
         required: true
         default: 'master'
-        type: string
+        type: choice
+        options:
+          - master
+          - v24.10.6
+          - v23.05.4
+          - v22.03.6
 
 jobs:
   check:
