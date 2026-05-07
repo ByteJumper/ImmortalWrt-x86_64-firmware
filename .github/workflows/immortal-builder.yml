@@ -3,10 +3,15 @@ name: Immortal Builder
 on:
   repository_dispatch:
   workflow_dispatch:
-
+    inputs:
+      version:
+        description: 'ImmortalWrt 版本 (例如: v24.10.6, master)'
+        required: true
+        default: 'master'
+        type: string
 env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH: v24.10.6
+  REPO_BRANCH: ${{ github.event.inputs.version }}
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
   DIY_P1_SH: diy-part1.sh
